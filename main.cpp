@@ -2,8 +2,8 @@
 #include <unistd.h>
 #include <termios.h>
 
-const char UP = 'j';
-const char DOWN = 'k';
+const char UP = 'k';
+const char DOWN = 'j';
 const char LEFT = 'h';
 const char RIGHT = 'l';
 
@@ -33,7 +33,6 @@ int main()
         int row = 0;
         int col = 0;
         std::cout << "\033[2J";
-        std::cout << "\033[H";
         std::cout.flush();
         switch (c)
         {
