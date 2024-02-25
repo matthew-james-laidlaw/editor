@@ -2,42 +2,63 @@
 
 #include <iostream>
 #include "Terminal.hpp"
-
-const char UP = 'k';
-const char DOWN = 'j';
-const char LEFT = 'h';
-const char RIGHT = 'l';
+#include "Exceptions.hpp"
 
 class View
 {
 public:
 
-    void Reset()
+    void Clear()
     {
         std::cout << "\033[2J";
+        std::cout.flush();
+    }
+
+    void MoveCursorHome()
+    {
         std::cout << "\033[H";
         std::cout.flush();
     }
 
-    void Update(char keystroke)
+    void Reset()
     {
-        switch (keystroke)
+        this->Clear();
+        this->MoveCursorHome();
+    }
+
+    void Render()
+    {
+        this->Reset();
+        for (int i = 0; i < 10; ++i)
         {
-            case UP:
-                std::cout << "\033[1A";
-                break;
-            case DOWN:
-                std::cout << "\033[1B";
-                break;
-            case LEFT:
-                std::cout << "\033[1D";
-                break;
-            case RIGHT:
-                std::cout << "\033[1C";
-                break;
-            default:
-                break;
+            std::cout << "~";
+            std::cout << "\033[1E";
+            std::cout.flush();
         }
+        this->MoveCursorHome();
+    }
+
+    void MoveCursorUp()
+    {
+        std::cout << "\033[1A";
+        std::cout.flush();
+    }
+
+    void MoveCursorDown()
+    {
+        std::cout << "\033[1B";
+        std::cout.flush();
+    }
+
+    void MoveCursorLeft()
+    {
+        std::cout << "\033[1D";
+        std::cout.flush();
+    }
+
+    void MoveCursorRight()
+    {
+        std::cout << "\033[1C";
         std::cout.flush();
     }
 

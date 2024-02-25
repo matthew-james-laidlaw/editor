@@ -3,9 +3,20 @@
 #include <stdexcept>
 #include <unistd.h>
 
+enum class Mode
+{
+    Normal,
+    Insert,
+};
+
 class Model
 {
+
 public:
+
+    Model()
+        : mode(Mode::Normal)
+    {}
 
     char GetKeystroke()
     {
@@ -17,5 +28,7 @@ public:
         }
         return keystroke;
     }
+
+    Mode mode;
 
 };
