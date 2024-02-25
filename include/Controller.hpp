@@ -2,69 +2,54 @@
 
 #include "Model.hpp"
 #include "View.hpp"
+#include "Exceptions.hpp"
 
-const char UP = 'k';
-const char DOWN = 'j';
-const char LEFT = 'h';
-const char RIGHT = 'l';
-const char QUIT = 'q';
-const char INSERT = 'i';
-const char ESC = '\033';
+#include <stdexcept>
 
 class Controller
 {
+
 public:
 
-    Controller()
-    {
-        view.Reset();
-    }
+    Controller() = default;
+    ~Controller() = default;
+    Controller(Controller const& other) = delete;
+    Controller(Controller&& other) = delete;
+    Controller& operator= (Controller const& other) = delete;
+    Controller&& operator= (Controller&& other) = delete;
 
     void Main()
     {
-        view.Render();
-
-        while (true)
+        view.Reset();
+        try
         {
-            char keystroke = model.GetKeystroke();
-
-            if (model.mode == Mode::Normal)
+            while (true)
             {
-                switch (keystroke)
-                {
-                    case QUIT:
-                        view.Reset();
-                        return;
-                    case UP:
-                        view.MoveCursorUp();
-                        break;
-                    case DOWN:
-                        view.MoveCursorDown();
-                        break;
-                    case LEFT:
-                        view.MoveCursorLeft();
-                        break;
-                    case RIGHT:
-                        view.MoveCursorRight();
-                        break;
-                    case INSERT:
-                        model.mode = Mode::Insert;
-                }
-            }
-            else if (model.mode == Mode::Insert)
-            {
-                switch (keystroke)
-                {
-                    case ESC:
-                        model.mode = Mode::Normal;
-                        break;
-                    default:
-                        std::cout << keystroke;
-                        std::cout.flush();
-                        break;
-                }
+                char keystroke = GetKeystroke();
+                model.Update(keystroke);
+                view.Render(model);
             }
         }
+        catch (ExitApplicationException const& e)
+        {
+            view.Reset();
+            return;
+        }
+        catch (...)
+        {
+            throw;
+        }
+    }
+
+    char GetKeystroke() const
+    {
+        char keystroke;
+        int bytesRead = read(STDIN_FILENO, &keystroke, 1);
+        if (bytesRead != 1)
+        {
+            throw std::runtime_error("failed to read in keystroke");
+        }
+        return keystroke;
     }
 
 private:
