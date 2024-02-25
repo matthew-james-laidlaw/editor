@@ -34,7 +34,7 @@ public:
                 {
                     case QUIT:
                         view.Reset();
-                        exit(0);
+                        return;
                     case UP:
                         view.MoveCursorUp();
                         break;

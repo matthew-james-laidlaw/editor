@@ -16,6 +16,8 @@ public:
 
     Model()
         : mode(Mode::Normal)
+        , row(0)
+        , col(0)
     {}
 
     char GetKeystroke()
@@ -30,5 +32,8 @@ public:
     }
 
     Mode mode;
+
+    int row;
+    int col;
 
 };
